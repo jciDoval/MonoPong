@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace MonoPong
 {
@@ -10,6 +12,14 @@ namespace MonoPong
     {
         GraphicsDeviceManager _graphics;
         SpriteBatch _spriteBatch;
+        Jugador jugador;
+        KeyboardState actualKeyboardState;
+        KeyboardState anteriorKeyboardState;
+        GamePadState actualGamePadState;
+        GamePadState anteriorGamePadState;
+
+        float jugadorVelocidadMovimiento;
+        
 
         public Game1()
         {
@@ -26,6 +36,9 @@ namespace MonoPong
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            jugador = new Jugador();
+            jugadorVelocidadMovimiento = 8.0f;
+            TouchPanel.EnabledGestures = GestureType.FreeDrag;
 
             base.Initialize();
         }
@@ -40,6 +53,10 @@ namespace MonoPong
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            Vector2 posicionJugador = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X,
+                    GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+
+            jugador.inicializar(Content.Load<Texture2D>("Graphics\\Jugador1"), posicionJugador);
         }
 
         /// <summary>
@@ -72,6 +89,9 @@ namespace MonoPong
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            _spriteBatch.Begin();
+            jugador.dibujar(_spriteBatch);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

@@ -134,21 +134,22 @@
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Game1.cs" />
+    <Compile Include="Jugador.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Content\Graphics\Enemigo.xnb">
+    <Content Include="Content\Graphics\Enemigo.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\Graphics\Jugador1.xnb">
+    </Content>
+    <Content Include="Content\Graphics\Jugador1.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\Graphics\Pelota.xnb">
+    </Content>
+    <Content Include="Content\Graphics\Pelota.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="MonoPong_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
