@@ -18,18 +18,18 @@ namespace MonoPong
 
         const int PADDLE_OFFSET = 70;   //margen de la representación del jugador con los bordes de la pantalla.
         const float BALL_START_SPEED = 8f;
+        const float KEYBOARD_PADDLE_SPEED = 10f;
 
         Player player1;
         Player player2;
         Ball ball;
 
-        //Jugador jugador;
+
         KeyboardState actualKeyboardState;
         KeyboardState anteriorKeyboardState;
         GamePadState actualGamePadState;
         GamePadState anteriorGamePadState;
 
-        float jugadorVelocidadMovimiento;
         
 
         public Game1()
@@ -108,6 +108,12 @@ namespace MonoPong
             ScreenHeight = GraphicsDevice.Viewport.Height;
 
             ball.Move(ball.Velocity);
+
+            Vector2 player1Velocity = Input.GetKeyboardInputDirection(PlayerIndex.One) * KEYBOARD_PADDLE_SPEED;
+            Vector2 player2Velocity = Input.GetKeyboardInputDirection(PlayerIndex.Two) * KEYBOARD_PADDLE_SPEED;
+
+            player1.Move(player1Velocity);
+            player2.Move(player2Velocity); 
 
             anteriorGamePadState = actualGamePadState;
             anteriorKeyboardState = actualKeyboardState;
