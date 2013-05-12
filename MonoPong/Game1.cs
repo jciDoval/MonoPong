@@ -12,7 +12,18 @@ namespace MonoPong
     {
         GraphicsDeviceManager _graphics;
         SpriteBatch _spriteBatch;
-        Jugador jugador;
+
+        public static int ScreenWith;
+        public static int ScreenHeight;
+
+        const int PADDLE_OFFSET = 70;   //margen de la representación del jugador con los bordes de la pantalla.
+        const float BALL_START_SPEED = 8f;
+
+        Player player1;
+        Player player2;
+        Ball ball;
+
+        //Jugador jugador;
         KeyboardState actualKeyboardState;
         KeyboardState anteriorKeyboardState;
         GamePadState actualGamePadState;
@@ -36,9 +47,16 @@ namespace MonoPong
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            jugador = new Jugador();
-            jugadorVelocidadMovimiento = 8.0f;
-            TouchPanel.EnabledGestures = GestureType.FreeDrag;
+
+            ScreenWith = GraphicsDevice.Viewport.Width;
+            ScreenHeight = GraphicsDevice.Viewport.Height;
+
+            player1 = new Player();
+            player2 = new Player();
+            ball = new Ball();
+            //jugador = new Jugador();
+            //jugadorVelocidadMovimiento = 8.0f;
+            //TouchPanel.EnabledGestures = GestureType.FreeDrag;
 
             base.Initialize();
         }
@@ -53,10 +71,20 @@ namespace MonoPong
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            Vector2 posicionJugador = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X,
-                    GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            player1.Texture = Content.Load<Texture2D>("Graphics\\Jugador1");
+            player2.Texture = Content.Load<Texture2D>("Graphics\\Enemigo");
 
-            jugador.inicializar(Content.Load<Texture2D>("Graphics\\Jugador1"), posicionJugador);
+            player1.Position = new Vector2(PADDLE_OFFSET, ScreenHeight / 2 - player1.Texture.Height / 2);
+            player2.Position = new Vector2(ScreenWith - player2.Texture.Width - PADDLE_OFFSET, ScreenHeight / 2 - player2.Texture.Height / 2);
+
+            ball.Texture = Content.Load<Texture2D>("Graphics\\Pelota");
+            //ball.Position = new Vector2(ScreenWith / 2 - ball.Texture.Width /2, ScreenHeight / 2 - ball.Texture.Height / 2);
+            ball.Launch(BALL_START_SPEED);
+
+            //Vector2 posicionJugador = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X,
+            //        GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+
+            //jugador.inicializar(Content.Load<Texture2D>("Graphics\\Jugador1"), posicionJugador);
         }
 
         /// <summary>
@@ -76,8 +104,38 @@ namespace MonoPong
         protected override void Update(GameTime gameTime)
         {
             // TODO: Add your update logic here
+            ScreenWith = GraphicsDevice.Viewport.Width;
+            ScreenHeight = GraphicsDevice.Viewport.Height;
 
+            ball.Move(ball.Velocity);
+
+            anteriorGamePadState = actualGamePadState;
+            anteriorKeyboardState = actualKeyboardState;
+
+            actualKeyboardState = Keyboard.GetState();
+            actualGamePadState = GamePad.GetState(PlayerIndex.One);
+
+            UpdatePlayer(gameTime);
             base.Update(gameTime);
+        }
+
+        private void UpdatePlayer(GameTime gameTime)
+        {
+            // Get Thumbstick Controls
+            //jugador.Posicion.X += actualGamePadState.ThumbSticks.Left.X * jugadorVelocidadMovimiento;
+            //jugador.Posicion.Y -= actualGamePadState.ThumbSticks.Left.Y * jugadorVelocidadMovimiento;
+
+            ////Get Keyboard / Dpad
+            //if (actualKeyboardState.IsKeyDown(Keys.Up) || actualGamePadState.DPad.Up == ButtonState.Pressed)
+            //{
+            //    jugador.Posicion.Y -= jugadorVelocidadMovimiento;
+            //}
+
+            //if (actualKeyboardState.IsKeyDown(Keys.Down) || actualGamePadState.DPad.Down == ButtonState.Pressed)
+            //{
+            //    jugador.Posicion.Y += jugadorVelocidadMovimiento;
+            //}
+
         }
 
         /// <summary>
@@ -86,11 +144,15 @@ namespace MonoPong
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            jugador.dibujar(_spriteBatch);
+
+            player1.Draw(_spriteBatch);
+            player2.Draw(_spriteBatch);
+            ball.Draw(_spriteBatch);
+
             _spriteBatch.End();
 
             base.Draw(gameTime);

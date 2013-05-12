@@ -13,12 +13,8 @@ namespace MonoPong
             set { this.JugadorTextura = jugadorTextura; }
         }
 
-        private Vector2 posicion;
-        public Vector2 Posicion
-        {
-            get { return posicion; }
-            set { this.Posicion = posicion; }
-        }
+        //private Vector2 posicion;
+        public Vector2 Posicion;
 
         private int puntuacion;
         public int Puntuacion
@@ -45,7 +41,7 @@ namespace MonoPong
         public void inicializar(Texture2D textura, Vector2 pos)
         {
             jugadorTextura = textura;
-            posicion = pos;
+            Posicion = pos;
             alto = jugadorTextura.Height;
             ancho = jugadorTextura.Width;
             puntuacion = 0;
@@ -59,7 +55,12 @@ namespace MonoPong
 
         public void dibujar(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(jugadorTextura, posicion, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);            
+            spriteBatch.Draw(jugadorTextura, Posicion, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);            
+        }
+
+        public Jugador()
+        {
+
         }
     }
 }
