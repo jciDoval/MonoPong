@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -36,6 +37,7 @@ namespace MonoPong
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            TouchPanel.EnabledGestures = GestureType.FreeDrag;
         }
 
         /// <summary>
@@ -115,11 +117,39 @@ namespace MonoPong
             player1.Move(player1Velocity);
             player2.Move(player2Velocity); 
 
-            anteriorGamePadState = actualGamePadState;
-            anteriorKeyboardState = actualKeyboardState;
 
-            actualKeyboardState = Keyboard.GetState();
-            actualGamePadState = GamePad.GetState(PlayerIndex.One);
+            //Movimiento para pantallas tactiles.
+            Vector2 player1TouchVelocity, player2TouchVelocity;
+            Input.ProcessTouchInput(out player1TouchVelocity, out player2TouchVelocity);
+
+            player1.Move(player1TouchVelocity);
+            player2.Move(player2TouchVelocity);
+
+            if (GameObject.CheckPaddleBallCollision(player1, ball))
+            {
+                ball.Velocity.X = Math.Abs(ball.Velocity.X);
+            }
+
+            if (GameObject.CheckPaddleBallCollision(player2, ball))
+            {
+                ball.Velocity.X = -Math.Abs(ball.Velocity.X);
+            }
+
+            if (ball.Position.X + ball.Texture.Width < 0)
+            {
+                ball.Launch(BALL_START_SPEED);                
+            }
+
+            if (ball.Position.X > Game1.ScreenWith)
+            {
+                ball.Launch(BALL_START_SPEED);                
+            }
+
+            //anteriorGamePadState = actualGamePadState;
+            //anteriorKeyboardState = actualKeyboardState;
+
+            //actualKeyboardState = Keyboard.GetState();
+            //actualGamePadState = GamePad.GetState(PlayerIndex.One);
 
             UpdatePlayer(gameTime);
             base.Update(gameTime);

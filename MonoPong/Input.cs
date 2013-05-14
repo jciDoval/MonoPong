@@ -43,5 +43,29 @@ namespace MonoPong
 
             return direction;
         }
+
+        public static void ProcessTouchInput(out Vector2 playerVelocity1, out Vector2 playerVelocity2)
+        {
+            Gestures.Clear();
+            while (TouchPanel.IsGestureAvailable)
+            {
+                Gestures.Add(TouchPanel.ReadGesture());
+            }
+
+            playerVelocity1 = Vector2.Zero;
+            playerVelocity2 = Vector2.Zero;
+
+            foreach (GestureSample gs in Gestures)
+            {
+                if (gs.GestureType == GestureType.FreeDrag)
+                {
+                    if (gs.Position.X >= 0 && gs.Position.X <= Game1.ScreenWith / 2)
+                        playerVelocity1.Y += gs.Delta.Y;
+
+                    if (gs.Position.X >= Game1.ScreenWith / 2 && gs.Position.X <= Game1.ScreenWith)
+                        playerVelocity2.Y += gs.Delta.Y;
+                }
+            }
+        }
     }
 }
